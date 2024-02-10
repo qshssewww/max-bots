@@ -6,9 +6,7 @@ const bot = new TelegramBot(token, { polling: true });
 
 let chatIds = [];
 
-let isAdmin = false
-
-const admins = ['Htubgi87', 'ggrrddoonn', 'kisa_mew']
+// const admins = ['Htubgi87', 'ggrrddoonn', 'kisa_mew']
 
 
 function sendMessageToChats(message) {
@@ -24,24 +22,14 @@ function sendMessageToChats(message) {
 
 
 bot.onText(/\/sendMess (.+)/, (msg, match) => {
-    admins.map(i =>{
-        if (i === msg.chat.username){
-            isAdmin = true
-        }
-    })
-    if (isAdmin){
+    if (msg.chat.username === 'Htubgi87' || msg.chat.username === 'ggrrddoonn' || msg.chat.username === 'kisa_mew'){
         const messageToSend = match[1];
         sendMessageToChats(messageToSend);
     }
 });
 
 bot.onText(/\/addGroup (.+)/, (msg, match) => {
-    admins.map(i =>{
-        if (i === msg.chat.username){
-            isAdmin = true
-        }
-    })
-    if (isAdmin){
+    if (msg.chat.username === 'Htubgi87' || msg.chat.username === 'ggrrddoonn' || msg.chat.username === 'kisa_mew'){
         const index = chatIds.indexOf(match[1])
         if (index !== -1){
             bot.sendMessage(msg.chat.id, `группа ${match[1]} уже есть в списке!`)
@@ -61,12 +49,7 @@ bot.onText(/\/addGroup (.+)/, (msg, match) => {
 });
 
 bot.onText(/\/removeGroup (.+)/, (msg, match) => {
-    admins.map(i =>{
-        if (i === msg.chat.username){
-            isAdmin = true
-        }
-    })
-    if (isAdmin){
+    if (msg.chat.username === 'Htubgi87' || msg.chat.username === 'ggrrddoonn' || msg.chat.username === 'kisa_mew'){
         const index = chatIds.indexOf(match[1])
         if (index !== -1){
             chatIds.splice(index, 1)
@@ -79,40 +62,25 @@ bot.onText(/\/removeGroup (.+)/, (msg, match) => {
 });
 
 
-bot.on('message', msg => {
-    console.log(msg)
-    admins.map(i =>{
-        if (i === msg.chat.username){
-            isAdmin = true
+
+bot.on('message', (msg) => {
+    if (msg.text === '/start'){
+        const chatId = msg.chat.id
+        if (msg.chat.username === 'Htubgi87' || msg.chat.username === 'ggrrddoonn' || msg.chat.username === 'kisa_mew'){
+            bot.sendMessage(chatId, '1 - добавьте бота в чат. 2 - Добавьте группу командой /addGroup @<ваша группа> (удалить /removeGroup @<ваша группа>) Для просмотра списка всех групп введите ' +
+                'команду /groups. 3 - чтобы отправить сообщения введите команду /sendMess <ваше сообщение>')
         }
-    })
-    if (msg.text === '/groups' && isAdmin){
+    }
+    if (msg.text === '/groups' && (msg.chat.username === 'Htubgi87' || msg.chat.username === 'ggrrddoonn' || msg.chat.username === 'kisa_mew')){
         if (chatIds.length > 0){
             let res = ''
             chatIds.forEach(i => {
-                res = res + ', ' + i
+                res = res + ' ' + i
             })
             bot.sendMessage(msg.chat.id, res)
         }
         else {
             bot.sendMessage(msg.chat.id, 'список пустой')
-        }
-    }
-});
-
-
-
-bot.on('message', (msg) => {
-    if (msg.text === '/start'){
-        admins.map(i =>{
-            if (i === msg.chat.username){
-                isAdmin = true
-            }
-        })
-        const chatId = msg.chat.id
-        if (isAdmin){
-            bot.sendMessage(chatId, '1 - добавьте бота в чат. 2 - Добавьте группу командой /addGroup @<ваша группа> (удалить /removeGroup @<ваша группа>) Для просмотра списка всех групп введите ' +
-                'команду /groups. 3 - чтобы отправить сообщения введите команду /sendMess <ваше сообщение>')
         }
     }
 });
