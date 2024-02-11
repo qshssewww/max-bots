@@ -5,7 +5,6 @@ const bot = new TelegramBot(token, { polling: true });
 
 let chatIds = [];
 
-// const admins = ['Htubgi87', 'ggrrddoonn', 'kisa_mew']
 
 
 function sendMessageToChats(message) {
@@ -36,7 +35,6 @@ bot.onText(/\/addGroup (.+)/, (msg, match) => {
         else {
             const res = match[1].split(' ')
             chatIds = [...chatIds, ...res]
-            console.log(chatIds, 'aaa')
             if (res.length > 1){
                 bot.sendMessage(msg.chat.id, `группы ${match[1]} успешно добавлена`)
             }
